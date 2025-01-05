@@ -5,11 +5,13 @@ on:
       - opened
       - synchronize
       - reopened
+      -
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: leafo/gh-actions-lua@v10
       - run: rustup update
       - run: cargo check
       - run: cargo build
