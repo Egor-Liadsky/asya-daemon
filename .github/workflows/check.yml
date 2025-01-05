@@ -21,7 +21,7 @@ jobs:
 
       # Шаг 4: Загрузка и установка LuaJIT
       - name: Install LuaJIT
-        run: sudo apt install -y luajit pkg-config libssl-dev
+        run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev
 
       - name: sex
         run: echo $PKG_CONFIG_PATH
