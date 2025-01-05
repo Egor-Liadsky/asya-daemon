@@ -1,17 +1,40 @@
-name: Cargo Build & Test
+name: Rust CI
+
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      -
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: leafo/gh-actions-lua@v10
-      - run: rustup update
-      - run: cargo check
-      - run: cargo build
+      # Шаг 1: Клонирование репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Шаг 2: Установка Rust
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      # Шаг 4: Сборка проекта
+      - name: Build project
+        run: cargo build --verbose
+
+      # Шаг 5: Запуск тестов
+      - name: Run tests
+        run: cargo test --verbose
+
+      # Шаг 6: Проверка форматирования
+      - name: Check formatting
+        run: cargo fmt -- --check
+
+      # Шаг 7: Проверка на коды с предупреждениями
+      - name: Check for warnings
+        run: cargo clippy -- -D warnings
