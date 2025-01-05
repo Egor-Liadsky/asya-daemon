@@ -26,6 +26,9 @@ jobs:
       - name: Install LuaJIT
         run: sudo apt install -y luajit pkg-config libssl-dev
 
+      - name: Install pkg-config
+        run: sudo apt install pkg-config
+
       # Шаг 4: Сборка проекта
       - name: Build project
         run: cargo build --verbose
