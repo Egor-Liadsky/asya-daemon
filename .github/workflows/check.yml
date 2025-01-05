@@ -7,9 +7,8 @@ on:
       - reopened
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  lint:
+    runs-on: ubяuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,5 +19,6 @@ jobs:
       - name: Install packages
         run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev
 
-      - name: Build project
-        run: cargo build --release
+      - name: Lint
+        run: cargo clippy
+
