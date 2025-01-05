@@ -24,13 +24,7 @@ jobs:
 
       # Шаг 4: Загрузка и установка LuaJIT
       - name: Install LuaJIT
-        run: |
-          git clone https://luajit.org/git/luajit.git
-          cd luajit
-          make
-          sudo make install
-          export PATH="/usr/local/bin:$PATH"
-          lua -v
+        run: sudo apt install -y luajit pkg-config libssl-dev
 
       # Шаг 4: Сборка проекта
       - name: Build project
