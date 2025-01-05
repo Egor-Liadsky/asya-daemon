@@ -1,0 +1,13 @@
+name: Cargo Build & Test
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup update
