@@ -18,9 +18,6 @@ jobs:
       # Шаг 2: Установка Rust
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
 
       # Шаг 4: Загрузка и установка LuaJIT
       - name: Install LuaJIT
@@ -28,9 +25,10 @@ jobs:
 
       - name: sex
         run: echo $PKG_CONFIG_PATH
-#      # Шаг 4: Сборка проекта
-#      - name: Build project
-#        run: cargo build --verbose
+
+      # Шаг 4: Сборка проекта
+      - name: Build project
+        run: cargo build --verbose
 #
 #      # Шаг 5: Запуск тестов
 #      - name: Run tests
