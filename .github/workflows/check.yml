@@ -22,3 +22,18 @@ jobs:
       - name: Lint
         run: cargo clippy
 
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Set up Rust
+          uses: dtolnay/rust-toolchain@stable
+
+        - name: Install packages
+          run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev
+
+        - name: Lint
+          run: cargo test --all
+
