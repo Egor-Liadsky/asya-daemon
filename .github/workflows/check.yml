@@ -21,7 +21,6 @@ jobs:
 
       - name: Lint
         run: cargo clippy
-
     test:
       runs-on: ubuntu-latest
       steps:
@@ -34,6 +33,6 @@ jobs:
         - name: Install packages
           run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev
 
-        - name: Lint
+        - name: Test
           run: cargo test --all
 
