@@ -21,6 +21,11 @@ jobs:
         with:
           toolchain: stable
           override: true
+
+      - name: LuaJIT
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "luajit-2.1.0-beta3"
       # Шаг 4: Сборка проекта
       - name: Build project
         run: cargo build --verbose
