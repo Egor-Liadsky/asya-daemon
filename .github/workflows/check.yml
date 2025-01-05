@@ -17,7 +17,7 @@ jobs:
 
       # Шаг 2: Установка Rust
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
 
       # Шаг 4: Загрузка и установка LuaJIT
       - name: Install LuaJIT
