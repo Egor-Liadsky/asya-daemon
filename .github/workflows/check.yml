@@ -22,10 +22,17 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: LuaJIT
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "luajit-2.1.0-beta3"
+      # Шаг 4: Загрузка и установка LuaJIT
+      - name: Install LuaJIT
+        run: |
+          wget http://luajit.org/download/LuaJIT-2.1.0-beta3.tar.gz
+          tar -xzf LuaJIT-2.1.0-beta3.tar.gz
+          cd LuaJIT-2.1.0-beta3
+          make
+          sudo make install
+          export PATH="/usr/local/bin:$PATH"
+          lua -v
+
       # Шаг 4: Сборка проекта
       - name: Build project
         run: cargo build --verbose
