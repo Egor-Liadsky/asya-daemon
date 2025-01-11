@@ -31,7 +31,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install packages
-        run: sudo apt install -y libdbus-1-dev libluajit-5.1-dev pkg-config libssl-dev
+        run: sudo apt install -y dbus-1 libluajit-5.1-dev pkg-config libssl-dev
 
       - name: Test
         run: cargo test --all
