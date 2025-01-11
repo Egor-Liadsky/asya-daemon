@@ -1,4 +1,4 @@
-name: Cargo Build & Test
+name: Checkout
 on:
   pull_request:
     types:
@@ -31,7 +31,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install packages
-        run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev
+        run: sudo apt install -y libluajit-5.1-dev pkg-config libssl-dev dbus-1
 
       - name: Test
         run: cargo test --all
