@@ -116,3 +116,60 @@ fn pctl_metadat_prop(prop: &str) -> Option<String> {
 pub fn play_prev() {
     shell::execute_command(vec!["playerctl", "previous"]).expect("playerctl prev caused error");
 }
+
+#[cfg(target_family = "windows")]
+use winapi::um::winuser::{
+    keybd_event, KEYEVENTF_KEYUP, VK_MEDIA_NEXT_TRACK, VK_MEDIA_PLAY_PAUSE, VK_MEDIA_PREV_TRACK,
+};
+
+#[cfg(target_family = "windows")]
+pub fn play_pause() {
+    unsafe {
+       keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, 0, 0);
+       keybd_event(VK_MEDIA_PLAY_PAUSE as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+}
+
+#[cfg(target_family = "windows")]
+pub fn get_status() -> MediaPlayingStatus {
+    use windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager;
+    
+    let session_manager = GlobalSystemMediaTransportControlsSessionManager::RequestAsync()
+        .expect("Failed to initiate request for session manager")
+        .get()
+        .expect("Failed to get session manager");
+
+    let session = session_manager.GetCurrentSession().expect("Failed to get current session");
+        
+    let properties = session
+        .TryGetMediaPropertiesAsync()
+        .expect("Failed to initiate request for media properties")
+        .get()
+        .expect("Failed to get media properties");
+
+    let track_info = TrackInfo {
+        title: Some(properties.Title().expect("Failed to get title").to_string()),
+        artist: Some(properties.Artist().expect("Failed to get artist").to_string()),
+        album: Some(properties.AlbumTitle().expect("Failed to get album title").to_string()),
+    };
+
+    MediaPlayingStatus::Playing(track_info)
+}
+
+#[cfg(target_family = "windows")]
+pub fn play_next() -> Result<(), String>{
+    unsafe {
+        keybd_event(VK_MEDIA_NEXT_TRACK as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_NEXT_TRACK as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}
+
+#[cfg(target_family = "windows")]
+pub fn play_prev() -> Result<(), String>{
+    unsafe {
+        keybd_event(VK_MEDIA_PREV_TRACK as u8, 0, 0, 0);
+        keybd_event(VK_MEDIA_PREV_TRACK as u8, 0, KEYEVENTF_KEYUP, 0);
+    }
+    Ok(())
+}

@@ -1,11 +1,12 @@
 local config = {
   net = {
-    http_port = 3001,
+    ws_port = 3001,
+    ws_ip = "127.0.0.1"
   },
 
   logging = {
     place = false,   -- Loggin module. In log-file enable always.
-    level = "debug", -- Logging level: "error", "warn", "info", "debug", "trace"
+    level = "Debug", -- Logging level: "Error", "Warn", "Info", "Debug", "Trace"
     folder = "logs", -- Folder for logs.
   },
 

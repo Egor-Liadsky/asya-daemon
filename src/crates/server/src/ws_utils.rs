@@ -3,7 +3,7 @@ use std::sync::Arc;
 use actix_web::{rt, web, Error, HttpRequest, HttpResponse};
 use actix_ws::{AggregatedMessage, Session};
 use futures_util::StreamExt;
-use log::{info, warn};
+use tracing::*;
 use shared::event_system;
 use tokio::{sync::RwLock, task};
 use usecases::AsyaResponse;
@@ -87,8 +87,13 @@ async fn subscribe_to_asya_response(session: Arc<RwLock<Session>>) {
         move |event: Arc<AsyaResponse>| {
             let session = session.clone();
             task::spawn(async move {
+                let is_err = match *event {
+                    AsyaResponse::Err { message: _ } => true,
+                    AsyaResponse::Ok { message: _ } => false,
+                };
+
                 let response = Responses::Base {
-                    is_err: false,
+                    is_err,
                     message: event.to_string().replace("\"", ""),
                 };
 

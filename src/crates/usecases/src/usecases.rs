@@ -1,6 +1,7 @@
-use log::*;
 use macros::Stringify;
+
 use serde::{Deserialize, Serialize};
+use tracing::*;
 
 use crate::scenarios::*;
 
@@ -10,45 +11,55 @@ use crate::scenarios::*;
 #[derive(Debug, Stringify, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub enum Usecases {
+    /// Turns off current track.
+    /// # Examples
+    ///  - Asya, turns off the music, please.
+    ///  - Shut up music
     TurnOffMusic,
+
+    /// Turns on current track.
+    /// # Examples
+    ///  - Asya, turn the music back on.
+    ///  - Resume the song
     TurnOnMusic,
+
+    /// Returns currently playing track.
+    ///
+    /// # Examples
+    ///  - What song is playing right now?
+    ///  - What's the name of the current track?
     GetMusicStatus,
+
+    /// Play next track.
+    ///
+    /// # Examples
+    ///  - Next song, please.
+    ///  - Skip to the next track.
     PlayNextTrack,
+
+    /// Play previous track.
+    ///
+    /// # Examples
+    ///  - Play the previous song.
+    ///  - Go back to the last track.
     PlayPrevTrack,
 
-    #[serde(rename_all = "camelCase")]
-    Open {
-        app_kind: AppKind,
-    },
+    OpenApp(String),
 
     StartBasicSystemMonitoring,
+
+    /// If no other options are suitable, then this is a simple request from a language model.
+    ///
+    /// # Examples
+    ///  - Can you help me with that?
+    ///  - Please provide an answer.
     Answer,
-}
-
-#[derive(Serialize, Stringify, Deserialize, Debug, Clone, schemars::JsonSchema)]
-#[serde(rename_all = "camelCase")]
-pub enum AppKind {
-    Terminal,
-    Browser,
-    Steam,
-    Discord,
-    Telegram,
-    Specific(App),
-}
-
-#[derive(Serialize, Stringify, Deserialize, Debug, Clone, schemars::JsonSchema)]
-#[serde(rename_all = "camelCase")]
-pub enum App {
-    // Tui(String),
-    Gui(String),
 }
 
 impl Usecases {
     pub fn stringify_all() -> String {
         let strings = [
             Usecases::stringify_one(),
-            AppKind::stringify_one(),
-            App::stringify_one(),
         ];
         let iter = strings.iter().map(|el| el.to_string() + "\n\n");
         String::from_iter(iter)
@@ -68,7 +79,7 @@ impl Usecases {
             Usecases::StartBasicSystemMonitoring => {
                 system_monitoring::start_basic_monitoring(userinput).await
             }
-            Usecases::Open { app_kind } => open::open(app_kind).await,
+            Usecases::OpenApp(app) => open_app::open(app).await,
             Usecases::Answer => geranal_answer::answer(userinput).await,
         }
     }
